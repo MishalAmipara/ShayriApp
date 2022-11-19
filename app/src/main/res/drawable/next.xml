@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rotate xmlns:android="http://schemas.android.com/apk/res/android"
+    android:fromDegrees="180">
+<vector
+
+    android:width="48dp"
+    android:height="48dp"
+    android:viewportWidth="48"
+    android:viewportHeight="48"
+    android:tint="#F80F0101">
+    <path
+        android:fillColor="@android:color/white"
+        android:pathData="M20,44 L0,24 20,4 22.8,6.85 5.65,24 22.8,41.15Z"/>
+</vector>
+</rotate>
