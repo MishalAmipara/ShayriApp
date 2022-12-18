@@ -1,6 +1,10 @@
 package com.example.shayriapp;
 
+import android.os.Environment;
+
 import com.example.shayriapp.R;
+
+import java.io.File;
 
 public class Color_Array {
     public static int[] colors = {R.color.c1, R.color.c2, R.color.c3,
@@ -18,5 +22,16 @@ public class Color_Array {
 
     public static String[] fonts={"BOD_PSTC.TTF","BRADHITC.TTF","BRITANIC.TTF","BRUSHSCI.TTF","FREESCPT.TTF",
                 "ITCEDSCR.TTF","LHANDW.TTF","MATURASC.TTF","segoesc.ttf"};
+    public static String[] emog= {"\uD83D\uDE0A \uD83E\uDEE3 \uD83E\uDD2B \uD83D\uDE0A \uD83E\uDEE3 \uD83E\uDD2B",
+            "\uD83D\uDE0A \uD83E\uDEE3 \uD83E\uDD2B \uD83D\uDE0A \uD83E\uDEE3 \uD83E\uDD2B",
+            "\uD83D\uDE0A \uD83E\uDEE3 \uD83E\uDD2B \uD83D\uDE0A \uD83E\uDEE3 \uD83E\uDD2B",
+            "\uD83D\uDE0A \uD83E\uDEE3 \uD83E\uDD2B \uD83D\uDE0A \uD83E\uDEE3 \uD83E\uDD2B",
+            "\uD83D\uDE0A \uD83E\uDEE3 \uD83E\uDD2B \uD83D\uDE0A \uD83E\uDEE3 \uD83E\uDD2B",
+            "\uD83E\uDD10 \uD83D\uDE2F \uD83E\uDD1A \uD83D\uDC4B",
+            "\uD83E\uDDD3 \uD83E\uDDD1 \uD83D\uDC69 \uD83D\uDC67",
+            "\uD83E\uDD26 \uD83D\uDE47 \uD83D\uDE46 \uD83E\uDD37",
+            "\uD83D\uDC91  \uD83D\uDC6B \uD83D\uDC6D \uD83D\uDC6C"};
+
+    public static File file = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
 
 }

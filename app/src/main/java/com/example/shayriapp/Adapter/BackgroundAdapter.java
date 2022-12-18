@@ -16,20 +16,19 @@ import com.example.shayriapp.R;
 public class BackgroundAdapter extends BaseAdapter
 {
     Context context;
-    int[] colors;
+    int[] backGroound;
     String type;
-    public BackgroundAdapter(Context context, int[] colors,String type)
+    public BackgroundAdapter(Context context, int[] backGround,String type)
     {
-        this.colors=colors;
+        this.backGroound=backGround;
         this.context=context;
         this.type=type;
     }
 
-
     @Override
     public int getCount()
     {
-        return colors.length;
+        return backGroound.length;
     }
 
     @Override
@@ -51,11 +50,12 @@ public class BackgroundAdapter extends BaseAdapter
 
        if(type=="color")
        {
-           gridText.setBackgroundColor(view.getResources().getColor(colors[i]));
+           gridText.setBackgroundColor(view.getResources().getColor(backGroound[i]));
+           gridText.setTextColor(backGroound[i]);
        }
        else
        {
-           gridText.setBackgroundResource(colors[i]);
+           gridText.setBackgroundResource(backGroound[i]);
        }
        return view;
     }

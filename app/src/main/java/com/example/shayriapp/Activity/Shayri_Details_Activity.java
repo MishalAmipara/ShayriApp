@@ -1,17 +1,32 @@
 package com.example.shayriapp.Activity;
 
+import static com.example.shayriapp.Color_Array.colors;
+import static com.example.shayriapp.Color_Array.gradients;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.ClipData;
 import android.content.ClipboardManager;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.GridView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.shayriapp.Adapter.BackgroundAdapter;
+import com.example.shayriapp.Color_Array;
 import com.example.shayriapp.R;
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
+
+import java.util.Random;
 
 public class Shayri_Details_Activity extends AppCompatActivity
 {
@@ -71,7 +86,8 @@ public class Shayri_Details_Activity extends AppCompatActivity
                 ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
                 ClipData clip = ClipData.newPlainText("label", shayri_Arr[pos]);
                 clipboard.setPrimaryClip(clip);
-                Toast.makeText(Shayri_Details_Activity.this, "Copied", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(Shayri_Details_Activity.this, "Copied", Toast.LENGTH_SHORT).show();
+                Toast.makeText(Shayri_Details_Activity.this,"Copied",Toast.LENGTH_SHORT).show();
             }
         });
         share.setOnClickListener(new View.OnClickListener() {
@@ -104,15 +120,42 @@ public class Shayri_Details_Activity extends AppCompatActivity
 
         full.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onClick(View view)
+            {
+                BottomSheetDialog bottomSheetDialog=new BottomSheetDialog(Shayri_Details_Activity.this);
+                View view1= LayoutInflater.from(Shayri_Details_Activity.this).inflate(R.layout.layout_background,null);
+                GridView gridView=view1.findViewById(R.id.layout_background_grid);
+                gridView.setNumColumns(3);
+                BackgroundAdapter backgroundAdapter=new BackgroundAdapter(Shayri_Details_Activity.this, gradients,"gradients");
+                gridView.setAdapter(backgroundAdapter);
+                bottomSheetDialog.setContentView(view1);
+                bottomSheetDialog.show();
+
+                //BottomSheetBehavior bottomSheetBehavior;
+              //  BottomSheetBehavior bottomSheetBehavior = BottomSheetBehavior.from((View) (view.getParent()));
+
+                //setting Peek at the 16:9 ratio keyline of its parent.
+                //bottomSheetBehavior.setPeekHeight(BottomSheetBehavior.PEEK_HEIGHT_AUTO);
+
+                gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+                        textView.setBackgroundResource(gradients[position]);
+                    }
+                });
 
             }
         });
         thme.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                int min=0;
+                int max= colors.length;
+                int rand=new Random().nextInt(max-min)+min;
+                textView.setBackgroundResource(colors[rand]);
             }
         });
     }
+
+
 }

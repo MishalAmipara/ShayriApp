@@ -6,7 +6,11 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +22,7 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.shayriapp.Adapter.BackgroundAdapter;
 import com.example.shayriapp.Adapter.FontAdapter;
@@ -25,7 +30,14 @@ import com.example.shayriapp.Color_Array;
 import com.example.shayriapp.R;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.Collections;
+import java.util.Date;
+import java.util.Locale;
 import java.util.Random;
 
 public class Edit_Shayri_Activity extends AppCompatActivity implements View.OnClickListener
@@ -34,18 +46,11 @@ public class Edit_Shayri_Activity extends AppCompatActivity implements View.OnCl
     SeekBar seekBar;
     TextView textView;
     String text;
-    String[] emog= {"\uD83D\uDE0A \uD83E\uDEE3 \uD83E\uDD2B \uD83D\uDE0A \uD83E\uDEE3 \uD83E\uDD2B",
-            "\uD83D\uDE0A \uD83E\uDEE3 \uD83E\uDD2B \uD83D\uDE0A \uD83E\uDEE3 \uD83E\uDD2B",
-            "\uD83D\uDE0A \uD83E\uDEE3 \uD83E\uDD2B \uD83D\uDE0A \uD83E\uDEE3 \uD83E\uDD2B",
-            "\uD83D\uDE0A \uD83E\uDEE3 \uD83E\uDD2B \uD83D\uDE0A \uD83E\uDEE3 \uD83E\uDD2B",
-            "\uD83D\uDE0A \uD83E\uDEE3 \uD83E\uDD2B \uD83D\uDE0A \uD83E\uDEE3 \uD83E\uDD2B",
-             "\uD83E\uDD10 \uD83D\uDE2F \uD83E\uDD1A \uD83D\uDC4B",
-            "\uD83E\uDDD3 \uD83E\uDDD1 \uD83D\uDC69 \uD83D\uDC67",
-            "\uD83E\uDD26 \uD83D\uDE47 \uD83D\uDE46 \uD83E\uDD37",
-            "\uD83D\uDC91  \uD83D\uDC6B \uD83D\uDC6D \uD83D\uDC6C"};
+
     int[] grad= gradients;
     TextView t_View;
     Button theme,zoom,text_color,text_size,share,font,emoji,bg;
+    File f;
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -68,10 +73,44 @@ public class Edit_Shayri_Activity extends AppCompatActivity implements View.OnCl
         zoom.setOnClickListener(this);
         bg.setOnClickListener(this);
         text_color.setOnClickListener(this);
-        share.setOnClickListener(this);
+
         font.setOnClickListener(this);
         emoji.setOnClickListener(this);
         text_size.setOnClickListener(this);
+
+        share.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v)
+            {
+
+                Bitmap icon = getBitmapFromView(textView);
+                //Intent share = new Intent(Intent.ACTION_SEND);
+                Intent share =new Intent(Intent.ACTION_SEND);
+                share.setType("image/jpeg");
+                ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+                icon.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+                int num=new Random().nextInt(2000);
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault());
+                String currentDateandTime = sdf.format(new Date());
+
+                f= new File(Color_Array.file.getAbsolutePath() + "/IMG_"+currentDateandTime+".jpg");
+                try
+                {
+                    f.createNewFile();
+                    FileOutputStream fo = new FileOutputStream(f);
+                    fo.write(bytes.toByteArray());
+                    Toast.makeText(Edit_Shayri_Activity.this,"File Downloaded",Toast.LENGTH_SHORT).show();
+                }
+                catch (IOException e)
+                {
+                    e.printStackTrace();
+                }
+
+                share.putExtra(Intent.EXTRA_STREAM, Uri.parse(f.getAbsolutePath()));
+                startActivity(Intent.createChooser(share, "Share Image"));
+            }
+
+        });
     }
 
     @Override
@@ -115,6 +154,7 @@ public class Edit_Shayri_Activity extends AppCompatActivity implements View.OnCl
             GridView gridView=view1.findViewById(R.id.layout_background_grid);
             //t_View.setBackgroundColor(getResources().getColor(Color_Array.colors[0]));
             //ArrayAdapter arrayAdapter=new ArrayAdapter(this,R.layout.background_grid_item,R.id.grid_text, Collections.singletonList(colors));
+            gridView.setNumColumns(3);
             BackgroundAdapter backgroundAdapter=new BackgroundAdapter(this, colors,"color");
             gridView.setAdapter(backgroundAdapter);
             bottomSheetDialog.setContentView(view1);
@@ -135,6 +175,7 @@ public class Edit_Shayri_Activity extends AppCompatActivity implements View.OnCl
             GridView gridView=view1.findViewById(R.id.layout_background_grid);
             //t_View.setBackgroundColor(getResources().getColor(Color_Array.colors[0]));
             //ArrayAdapter arrayAdapter=new ArrayAdapter(this,R.layout.background_grid_item,R.id.grid_text, Collections.singletonList(colors));
+            gridView.setNumColumns(5);
             BackgroundAdapter backgroundAdapter=new BackgroundAdapter(this, colors,"color");
             gridView.setAdapter(backgroundAdapter);
             bottomSheetDialog.setContentView(view1);
@@ -148,14 +189,8 @@ public class Edit_Shayri_Activity extends AppCompatActivity implements View.OnCl
                 }
             });
         }
-        if(view.getId()==share.getId())
-        {
-            Intent intent = new Intent(android.content.Intent.ACTION_SEND);
-            intent.setType("image/jpg");
-            TextView textView=findViewById(R.id.fullscreen);
-            Bitmap bmi= getBitmapFromView(textView);
-            startActivity(Intent.createChooser(intent, ""));
-        }
+
+
         if (view.getId()==font.getId())
         {
             BottomSheetDialog bottomSheetDialog=new BottomSheetDialog(this);
@@ -231,5 +266,29 @@ public class Edit_Shayri_Activity extends AppCompatActivity implements View.OnCl
             bottomSheetDialog.show();
         }
 
+    }
+
+    private Bitmap getBitmapFromView(View view1)
+    {
+        //Define a bitmap with the same size as the view
+        Bitmap returnedBitmap = Bitmap.createBitmap(view1.getWidth(), view1.getHeight(), Bitmap.Config.ARGB_8888);
+        //Bind a canvas to it
+        Canvas canvas = new Canvas(returnedBitmap);
+        //Get the view's background
+        Drawable bgDrawable = view1.getBackground();
+        if (bgDrawable != null)
+        {
+            //has background drawable, then draw it on the canvas
+            bgDrawable.draw(canvas);
+        }
+        else
+        {
+            //does not have background drawable, then draw white background on the canvas
+            canvas.drawColor(Color.WHITE);
+        }
+        // draw the view on the canvas
+        view1.draw(canvas);
+        //return the bitmap
+        return returnedBitmap;
     }
 }

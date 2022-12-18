@@ -13,7 +13,6 @@ import com.example.shayriapp.R;
 
 public class FontAdapter extends BaseAdapter
 {
-
     String[] fonts;
     Context context;
     public FontAdapter(Context context, String[] fonts)
@@ -21,12 +20,10 @@ public class FontAdapter extends BaseAdapter
         this.context=context;
         this.fonts=fonts;
     }
-
     @Override
     public int getCount() {
         return fonts.length;
     }
-
     @Override
     public Object getItem(int i) {
         return i;
