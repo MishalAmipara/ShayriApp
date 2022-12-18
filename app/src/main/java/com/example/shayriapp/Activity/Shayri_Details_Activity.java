@@ -53,7 +53,7 @@ public class Shayri_Details_Activity extends AppCompatActivity
         Button edit=findViewById(R.id.edit);
         Button full=findViewById(R.id.full);
         Button thme=findViewById(R.id.thme);
-
+        showToast();
         pre.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view)
@@ -156,6 +156,9 @@ public class Shayri_Details_Activity extends AppCompatActivity
             }
         });
     }
-
+    void showToast()
+    {
+        Toast.makeText(this, "This is just a message", Toast.LENGTH_SHORT).show();
+    }
 
 }
